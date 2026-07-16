@@ -1,0 +1,70 @@
+{
+  "port": "COM3",
+  "addr": 1,
+  "baud": 9600,
+  "ntc_temps": [
+    25.0,
+    25.0,
+    25.0,
+    25.0,
+    25.0,
+    20.4
+  ],
+  "ntc_curves": [
+    "10k",
+    "10k",
+    "10k",
+    "10k",
+    "10k",
+    "10k"
+  ],
+  "limit_temp_high": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+  ],
+  "limit_temp_low": [
+    -50,
+    -50,
+    -50,
+    -50,
+    -50,
+    -50
+  ],
+  "slope": [
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0
+  ],
+  "auto_run": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "ch_names": [
+    "CH1",
+    "CH2",
+    "CH3",
+    "CH4",
+    "CH5",
+    "CH6"
+  ],
+  "pullup_resistors": [
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0,
+    10.0
+  ],
+  "last_loaded_excel": ""
+}
