@@ -1,0 +1,16 @@
+{
+  "name": "空调快速测试",
+  "description": "空调主控板快速功能验证",
+  "channel_mapping": [
+    {"ntc_channel": 1, "voltage_channel": 1, "tolerance": 0.05, "compensation": true},
+    {"ntc_channel": 2, "voltage_channel": 2, "tolerance": 0.05, "compensation": true}
+  ],
+  "link_rules": [],
+  "ntc_params": {
+    "ntc_temps": [25.0, 25.0, 25.0, 25.0, 25.0, 25.0],
+    "slope": [2.0, 2.0, 0.0, 0.0, 0.0, 0.0],
+    "limit_temp_high": [50, 50, 100, 100, 100, 100],
+    "limit_temp_low": [-10, -10, -50, -50, -50, -50],
+    "auto_run": [true, true, false, false, false, false]
+  }
+}

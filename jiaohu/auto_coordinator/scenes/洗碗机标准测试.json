@@ -1,0 +1,16 @@
+{
+  "name": "洗碗机标准测试",
+  "description": "洗碗机主控板标准测试流程",
+  "channel_mapping": [
+    {"ntc_channel": 1, "voltage_channel": 5, "tolerance": 0.05, "compensation": true},
+    {"ntc_channel": 2, "voltage_channel": 6, "tolerance": 0.05, "compensation": true}
+  ],
+  "link_rules": [],
+  "ntc_params": {
+    "ntc_temps": [25.0, 25.0, 25.0, 25.0, 25.0, 25.0],
+    "slope": [3.0, 3.0, 0.0, 0.0, 0.0, 0.0],
+    "limit_temp_high": [70, 70, 100, 100, 100, 100],
+    "limit_temp_low": [25, 25, -50, -50, -50, -50],
+    "auto_run": [true, true, false, false, false, false]
+  }
+}

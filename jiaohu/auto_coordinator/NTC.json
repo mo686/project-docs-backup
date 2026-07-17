@@ -1,14 +1,14 @@
 {
-  "port": "COM3",
+  "port": "COM1",
   "addr": 1,
   "baud": 9600,
   "ntc_temps": [
+    29.3,
     25.0,
-    26.0,
     25.0,
-    150.0,
     25.0,
-    20.4
+    25.0,
+    25.0
   ],
   "ntc_curves": [
     "10k",
@@ -35,10 +35,10 @@
     -50
   ],
   "slope": [
-    5.0,
-    5.0,
-    5.0,
-    5.0,
+    108.5,
+    50.2,
+    4.7,
+    6.0,
     5.0,
     5.0
   ],
@@ -66,5 +66,9 @@
     10.0,
     10.0
   ],
-  "last_loaded_excel": ""
+  "last_loaded_excel": "D:\\Users\\zhuzx117\\Desktop\\Azzx\\project-docs-backup\\jiaohu\\auto_coordinator\\NTC.xlsx",
+  "_heartbeat": {
+    "timestamp": 1784256587.820062,
+    "pid": 21464
+  }
 }

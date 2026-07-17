@@ -1,0 +1,19 @@
+{
+  "name": "冰箱全温验证",
+  "description": "标准冰箱主控板全温度范围验证",
+  "channel_mapping": [
+    {"ntc_channel": 1, "voltage_channel": 11, "tolerance": 0.05, "compensation": true},
+    {"ntc_channel": 2, "voltage_channel": 12, "tolerance": 0.05, "compensation": true},
+    {"ntc_channel": 3, "voltage_channel": 13, "tolerance": 0.08, "compensation": true}
+  ],
+  "link_rules": [
+    {"trigger": 1, "linked": 2, "multiplier": 0.4}
+  ],
+  "ntc_params": {
+    "ntc_temps": [25.0, -18.0, 25.0, 25.0, 25.0, 25.0],
+    "slope": [1.0, -2.0, 3.0, 0.0, 0.0, 0.0],
+    "limit_temp_high": [5, 150, 40, 150, 150, 150],
+    "limit_temp_low": [-50, -18, -50, -50, -50, -50],
+    "auto_run": [true, true, true, false, false, false]
+  }
+}
