@@ -1,9 +1,9 @@
 {
-  "port": "COM1",
+  "port": "COM3",
   "addr": 1,
   "baud": 9600,
   "ntc_temps": [
-    29.3,
+    25.0,
     25.0,
     25.0,
     25.0,
@@ -35,10 +35,10 @@
     -50
   ],
   "slope": [
-    108.5,
-    50.2,
-    4.7,
-    6.0,
+    5.0,
+    5.0,
+    5.0,
+    5.0,
     5.0,
     5.0
   ],
@@ -51,7 +51,7 @@
     false
   ],
   "ch_names": [
-    "CH1",
+    "冷水",
     "CH2",
     "CH3",
     "CH4",
@@ -66,9 +66,17 @@
     10.0,
     10.0
   ],
-  "last_loaded_excel": "D:\\Users\\zhuzx117\\Desktop\\Azzx\\project-docs-backup\\jiaohu\\auto_coordinator\\NTC.xlsx",
+  "trigger_slope": [
+    -5.0,
+    -5.0,
+    -5.0,
+    -5.0,
+    -5.0,
+    -5.0
+  ],
+  "last_loaded_excel": "",
   "_heartbeat": {
-    "timestamp": 1784256587.820062,
-    "pid": 21464
+    "timestamp": 1784532028.1824455,
+    "pid": 14072
   }
 }

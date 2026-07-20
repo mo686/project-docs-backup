@@ -6,13 +6,9 @@ from PyQt5.QtWidgets import (
     QStatusBar, QLabel, QMessageBox, QScrollArea
 )
 from PyQt5.QtCore import QTimer, pyqtSignal, Qt
-from PyQt5.QtGui import QIcon
 
 from auto_coordinator.engine import AutoCoordinator
-from auto_coordinator.widgets.bind_tab import ChannelBindWidget
-
-from auto_coordinator.widgets.dashboard_tab import StatusDashboard
-from auto_coordinator.widgets.log_tab import LogPanel
+from auto_coordinator.widgets.summary_tab import SummaryPanel
 from auto_coordinator.widgets.acquisition_tab import AcquisitionTab
 from auto_coordinator.widgets.ntc_sim_tab import NTCSimTab
 
@@ -24,7 +20,9 @@ def run_migration(db_path: str):
     conn = sqlite3.connect(db_path)
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='channel_mapping'")
+        cursor.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' "
+            "AND name='channel_mapping'")
         if cursor.fetchone():
             conn.close()
             return
@@ -40,7 +38,7 @@ class AutoCoordinatorApp(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("联动调度引擎 - AutoCoordinator")
+        self.setWindowTitle("联动调度引擎")
         self.resize(900, 600)
         self.setMinimumSize(400, 300)
 
@@ -54,7 +52,6 @@ class AutoCoordinatorApp(QMainWindow):
         self.state_updated.connect(self._on_state_snapshot)
 
         self._init_ui()
-        self._connect_signals()
 
         self.alive_timer = QTimer(self)
         self.alive_timer.timeout.connect(self._check_alive)
@@ -64,7 +61,7 @@ class AutoCoordinatorApp(QMainWindow):
         toolbar = QToolBar("主工具栏")
         self.addToolBar(toolbar)
 
-        self.btn_pin = QAction("📌 置顶", self)
+        self.btn_pin = QAction("置顶", self)
         self.btn_pin.setCheckable(True)
         self.btn_pin.triggered.connect(self._on_pin)
         toolbar.addAction(self.btn_pin)
@@ -91,58 +88,58 @@ class AutoCoordinatorApp(QMainWindow):
         scroll.setWidget(self.tabs)
         self.setCentralWidget(scroll)
 
-        self.ntc_tab = NTCSimTab(curves=self.engine.data_reader.curves)
+        self.ntc_tab = NTCSimTab(
+            curves=self.engine.data_reader.curves)
         self.tabs.addTab(self.ntc_tab, "NTC模拟")
 
         self.acq_tab = AcquisitionTab(db_path=self.db_path)
         self.tabs.addTab(self.acq_tab, "电压采集")
 
-        self.bind_tab = ChannelBindWidget(self.engine.data_reader, self.db_path)
-        self.tabs.addTab(self.bind_tab, "通道绑定")
-
-        self.dashboard_tab = StatusDashboard(self.db_path)
-        self.tabs.addTab(self.dashboard_tab, "状态看板")
-
-        self.log_tab = LogPanel(self.db_path)
-        self.tabs.addTab(self.log_tab, "事件日志")
+        self.summary_tab = SummaryPanel(
+            self.engine.data_reader, self.db_path)
+        self.tabs.addTab(self.summary_tab, "通道状态")
 
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
-        self.lbl_ntc = QLabel("NTC: ○离线")
-        self.lbl_v = QLabel("1.py: ○离线")
+        self.lbl_ntc = QLabel("NTC模拟: ○离线")
+        self.lbl_v = QLabel("电压采集: ○离线")
         self.lbl_engine = QLabel("引擎: 已停止")
         self.status_bar.addWidget(self.lbl_ntc)
         self.status_bar.addWidget(self.lbl_v)
         self.status_bar.addWidget(self.lbl_engine)
 
-    def _connect_signals(self):
-        pass
-
     def _on_pin(self, checked):
         if checked:
-            self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+            self.setWindowFlags(
+                self.windowFlags() | Qt.WindowStaysOnTopHint)
         else:
-            self.setWindowFlags(self.windowFlags() & ~Qt.WindowStaysOnTopHint)
+            self.setWindowFlags(
+                self.windowFlags() & ~Qt.WindowStaysOnTopHint)
         self.show()
 
     def _on_start(self):
-        alive = self.engine.data_reader.check_alive(self.engine.ALIVE_TIMEOUT)
+        alive = self.engine.data_reader.check_alive(
+            self.engine.ALIVE_TIMEOUT)
         if not alive['ntc'] and not alive['voltage']:
-            QMessageBox.warning(self, "启动失败",
-                                "NTC.py 和 1.py 均离线，请先启动上位机")
+            QMessageBox.warning(
+                self, "启动失败",
+                "NTC.py 和 1.py 均离线，请先启动上位机")
             return
         if not alive['ntc']:
-            QMessageBox.warning(self, "启动失败",
-                                "NTC.py 离线，请先启动 NTC 上位机")
+            QMessageBox.warning(
+                self, "启动失败",
+                "NTC.py 离线，请先启动 NTC 上位机")
             return
         if not alive['voltage']:
-            QMessageBox.warning(self, "启动失败",
-                                "1.py 离线，请先启动电压采集上位机")
+            QMessageBox.warning(
+                self, "启动失败",
+                "1.py 离线，请先启动电压采集上位机")
             return
 
         if not self.engine.data_reader.mapping:
-            QMessageBox.warning(self, "启动失败",
-                                "未配置通道绑定，请先在「通道绑定」页配置")
+            QMessageBox.warning(
+                self, "启动失败",
+                "未配置通道绑定，请先在「通道状态」页配置")
             return
 
         self.engine.start()
@@ -170,20 +167,22 @@ class AutoCoordinatorApp(QMainWindow):
         self.lbl_engine.setText("引擎: 已停止")
 
     def _check_alive(self):
-        alive = self.engine.data_reader.check_alive(self.engine.ALIVE_TIMEOUT)
-        self.lbl_ntc.setText(f"NTC: {'●在线' if alive['ntc'] else '○离线'}")
-        self.lbl_v.setText(f"1.py: {'●在线' if alive['voltage'] else '○离线'}")
+        alive = self.engine.data_reader.check_alive(
+            self.engine.ALIVE_TIMEOUT)
+        self.lbl_ntc.setText(
+            f"NTC模拟: {'●在线' if alive['ntc'] else '○离线'}")
+        self.lbl_v.setText(
+            f"电压采集: {'●在线' if alive['voltage'] else '○离线'}")
 
     def _on_state_snapshot(self, state: dict):
-        self.dashboard_tab.update_from_snapshot(state)
+        self.summary_tab.update_dashboard(state)
 
     def closeEvent(self, event):
         if self.engine.running:
             reply = QMessageBox.question(
                 self, "确认退出",
                 "引擎正在运行中，确定要退出吗？",
-                QMessageBox.Yes | QMessageBox.No, QMessageBox.No
-            )
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.No:
                 event.ignore()
                 return

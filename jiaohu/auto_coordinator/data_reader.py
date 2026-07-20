@@ -62,15 +62,13 @@ class DataReader:
     """统一数据读取层"""
 
     def __init__(self):
-        self.BASE_DIR = Path(__file__).parent.parent
+        self.BASE_DIR = Path(__file__).parent
         self.db_path = str(self.BASE_DIR / 'voltage_data.db')
         self.config_path = str(self.BASE_DIR / 'config.json')
         self.ntc_json_path = self.BASE_DIR / 'NTC.json'
         self.ntc_xlsx_path = self.BASE_DIR / 'NTC.xlsx'
 
         self.mapping = {}
-        self.tolerances = {}
-        self.compensation_enabled = {}
 
         self.curves = {}
         self._load_curves()
@@ -88,14 +86,11 @@ class DataReader:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT ntc_channel, voltage_channel, tolerance, "
-            "compensation_enabled FROM channel_mapping"
+            "SELECT ntc_channel, voltage_channel FROM channel_mapping"
         )
         for row in cursor.fetchall():
-            ntc_ch, v_ch, tol, comp = row
+            ntc_ch, v_ch = row
             self.mapping[ntc_ch] = v_ch
-            self.tolerances[ntc_ch] = tol
-            self.compensation_enabled[ntc_ch] = bool(comp)
         conn.close()
 
     def read_voltage_data(self) -> Optional[List[float]]:
@@ -141,13 +136,6 @@ class DataReader:
         if cfg:
             return cfg.get('thresholds', [5.0] * 18)
         return [5.0] * 18
-
-    def calc_expected_voltage(self, temp: float, curve_name: str,
-                              pullup: float) -> float:
-        if curve_name not in self.curves:
-            return 0.0
-        conv = NTCConverter(self.curves[curve_name], pullup)
-        return conv.temp2voltage(temp)
 
     def check_alive(self, timeout: float) -> dict:
         result = {'ntc': False, 'voltage': False}

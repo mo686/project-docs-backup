@@ -95,12 +95,6 @@ def create_engine_config_json():
         return
     default = {
         "control_interval_ms": 100,
-        "max_deviation_hw_v": 0.5,
-        "compensation_damping": 0.5,
-        "compensation_max_per_cycle_v": 0.2,
-        "compensation_retry_max": 10,
-        "slope_reduce_default": 0.5,
-        "slope_restore_cycles": 5,
         "alive_timeout_s": 10.0,
         "state_retention_days": 7,
         "log_level": "INFO",

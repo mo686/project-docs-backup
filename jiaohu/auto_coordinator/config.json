@@ -19,8 +19,6 @@
         5.0,
         5.0
     ],
-    "event_display_mode": 1,
-    "plot_mode": 0,
     "channel_names": [
         "通道1",
         "通道2",
@@ -41,5 +39,6 @@
         "通道17",
         "通道18"
     ],
-    "time_format": "hms"
+    "event_display_mode": 0,
+    "plot_mode": 0
 }
